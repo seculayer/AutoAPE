@@ -62,6 +62,9 @@ sudo systemctl enable kubelet
 kubeadm config images pull
 ```
 ### Server Module Install
+```shell
+sudo kubeadm init --apiserver-advertise-address={kubernetes 마스터의IP}
+```
 #### Plugins
 #### DB Server
 #### MRMS
