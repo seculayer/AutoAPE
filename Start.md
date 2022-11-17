@@ -1,4 +1,5 @@
 # AutoAPE 시작하기
+> 추후 업데이트 예정에 있습니다.
 
 ## 준비
 * Nvidia GPU가 탑재된 워크스테이션 또는 서버
@@ -18,7 +19,6 @@
     * Oracle Linux == 8.5
 
 ## Install Guide
-설치 가이드 문서 준비중입니다.
 ### Docker & Kubernetes Install
 ### Server Module Install
 #### Plugins
