@@ -1,8 +1,13 @@
 # REST API - Management
+* Kubernetes Pod 내부 : *http://mrms-svc:9200*
+* Kubernetes Pod 외부 : *http://marster_ip:31920*
+
+  
 |Method|HTTP request|Description|
 |------|------------|-----------|
-|[**getConverterFunctions**](Managements.md)| **GET** /mrms/get_cvt_fn |모든 데이터변환 함수 정보 리스트 반환|
-|[**getAlgorithmInfo**](Managements.md)| **GET** /get_algorithm_info |모든 ML/DL 알고리즘 정보 리스트 반환|
+|[**getConverterFunctions**](Managements.md#getConverterFunctions) | **GET** /mrms/get_cvt_fn |모든 데이터변환 함수 정보 리스트 반환|
+|[**getAlgorithmInfo**](Managements.md#getAlgorithmInfo) | **GET** /get_algorithm_info |모든 ML/DL 알고리즘 정보 리스트 반환|
+
 
 <a name="getConverterFunctions"></a>
 # **getConverterFunctions**
