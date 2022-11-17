@@ -1,5 +1,5 @@
 # AutoAPE API Documents
-> 추후 업데이트 예정에 있습니다.
+> 추후 업데이트 예정입니다.
 
 | API | Type | Description |
 | --- | ---- | ----------- |

@@ -1,6 +1,8 @@
 # REST API - Management
-* Kubernetes Pod 내부 : *http://mrms-svc:9200*
-* Kubernetes Pod 외부 : *http://marster_ip:31920*
+> 추후 업데이트 예정입니다.
+
+> Kubernetes Pod 내부 : *http://mrms-svc:9200* </br>
+> Kubernetes Pod 외부 : *http://marster-ip:31920*
 
   
 |Method|HTTP request|Description|
