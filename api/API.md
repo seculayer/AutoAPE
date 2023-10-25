@@ -3,3 +3,4 @@
 | API | Type | Description |
 | --- | ---- | ----------- |
 | REST | [**Dataset**](./rest/Dataset.md) | 데이터셋 관리 |
+| REST | [**DataAnalysis**](./rest/DataAnalysis.md) | 데이터분석 관리|
