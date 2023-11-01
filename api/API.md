@@ -6,4 +6,7 @@
 | REST | [**DataAnalysis**](./rest/DataAnalysis.md) | 데이터분석 관리 |
 | REST | [**Recommendation**](./rest/Recommendation.md) | 추천 관리 |
 | REST | [**Project**](./rest/Project.md) | Project(학습) 생성 및 관리 |
-| REST | [**Inference**](./rest/Inference.md) | 검증 생성 및 관리 Inference |
+| REST | [**Inference**](./rest/Inference.md) | 검증 생성 및 관리 |
+| REST | [**Evaluation**](./rest/Evaluation.md) | 평가 결과 생성 및 관리 |
+| REST | [**XAI**](./rest/XAI.md) | XAI 생성 및 관리 |
+
