@@ -12,6 +12,7 @@
 [**DAWorkerReq**](DataAnalysis.md#DAWorkerReq) | **GET** /request_da_worker |DA Worker 생성요청|
 [**GetFieldUnique**](DataAnalysis.md#GetFieldUnique) | **GET** 	/mrms/get_field_unique |unique 반환|
 [**GetFieldWord**](DataAnalysis.md#GetFieldWord) | **GET** /mrms/get_field_word |word 반환|
+[**GetDatasetMeta**](DataAnalysis.md#GetDatasetMeta) | **GET** /mrms/get_dataset_meta |데이터셋 EDA결과 정보 반환 <br> {"dataset_id":(String), <br> "dataset_meta":{ <br> "correlation":(List), <br> "mutual_information":(List), <br> ...} <br> }|
 
 
 <a name="GetDataAnalsInfo"></a>
@@ -96,6 +97,20 @@ error : "error"
 ### Parameters
 ```
 ?dataset_id=(String)&field_name=(String)
+```
+
+### Return Type
+```
+success : Json Format(String)
+error : "error"
+```
+
+<a name="GetDatasetMeta"></a>
+# **GetDatasetMeta**
+
+### Parameters
+```
+?dataset_id=(String)
 ```
 
 ### Return Type
