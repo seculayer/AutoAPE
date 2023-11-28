@@ -56,7 +56,10 @@ Body: {"dataset_id": (String),
 ```
 - **format_json**
 ```
-형태상세정보(file_path, file_nm, field_list)
+파일형태 상세 정보 JSON
+ex) {"file_path": (String),
+     "file_nm": (String),
+     "field_list": "Survived,Pclass,Sex,SibSp,Parch,Fare"}
 ```
 ### Return Type
 ```
@@ -100,7 +103,7 @@ Body : {"dataset_id": (String)}
 ```
 ### Return Type
 ```
-success : Json Format(String)
+success : Json Format (String)
           {"dataset_id": (String),
            "dataset_format": (String),
            "n_cols": (String) ,
@@ -164,7 +167,7 @@ Body : {"project_id": (String)}
 ```
 ### Return Type
 ```
-success : project_target_field(String)
+success : target_field(String)
 error : "error"
 ```
 
