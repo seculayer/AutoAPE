@@ -20,8 +20,7 @@
 
 <a name="UpdateInfrSttus"></a>
 # **UpdateInfrSttus**
-현재 검증 상태를 실시간으로 해당 메소드 요청을 통해 업데이트 
-
+현재 검증 상태를 실시간으로 해당 메소드 요청을 통해 업데이트
 ### Parameters
 ```
 Body: {"hist_no": (String),
@@ -48,7 +47,6 @@ Body: {"hist_no": (String),
 - 오류 발생인 경우, message = 오류 내용과 stack trace 내용 포함 
 - 추후 생성 예정 
 ```
-
 ### Return Type
 ```
 success : "1"
@@ -74,7 +72,6 @@ error : "error"
 ```
 지정된 타겟 필드
 ```
-
 ### Return Type
 ```
 success : "1"
@@ -92,7 +89,6 @@ error : "error"
 ```
 프로젝트 ID
 ```
-
 ### Return Type
 ```
 success : Json Format(String)
@@ -117,7 +113,6 @@ error : "error"
 ```
 데이터셋 ID
 ```
-
 ### Return Type
 ```
 success : Json Format(String)
@@ -142,7 +137,6 @@ Body: {"hist_no": (String)}
 ```
 검증 Hist 번호(infr_hist_no)
 ```
-
 ### Return Type
 ```
 success : status cd(String)
@@ -160,7 +154,6 @@ error : "error"
 ```
 학습 Hist 번호
 ```
-
 ### Return Type
 ```
 success : List<Json> Format (String)
@@ -189,7 +182,6 @@ Body: {"type": (String),
 ``` 
 검증 Hist 번호(infr_hist_no)
 ```
-
 ### Return Type
 ```
 success : "1"
@@ -235,7 +227,6 @@ Body: {"infr_hist_no": (String),
 ```
 update 또는 delete
 ```
-
 ### Return Type
 ```
 success : "1"
@@ -261,9 +252,9 @@ error : "error"
 ```
 검증 F1-Score
 ```
-
 ### Return Type
 ```
 success : "1"
 error : "error"
 ```
+
