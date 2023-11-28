@@ -8,10 +8,10 @@
 |------|------------|-----------|
 |[**UpdateInfrSttus**](Inference.md#UpdateInfrSttus) | **POST** /mrms/status_update/inference |검증 상태 업데이트|
 |[**InferenceCreate**](Inference.md#InferenceCreate) | **GET** /mrms/inference_create |검증 생성|
-|[**GetInferenceInfo**](Inference.md#GetInferenceInfo) | **GET** /mrms/get_inference_info |검증 정보 반환(프로젝트id로 검색)|
-|[**GetInferenceInfoDataset**](Inference.md#GetInferenceInfoDataset) | **GET** /mrms/get_inference_info_dataset |검증 정보 반환(데이터셋id로 검색)|
+|[**GetInferenceInfo**](Inference.md#GetInferenceInfo) | **GET** /mrms/get_inference_info |검증 상세 정보 반환(프로젝트id로 검색)|
+|[**GetInferenceInfoDataset**](Inference.md#GetInferenceInfoDataset) | **GET** /mrms/get_inference_info_dataset |검증 상세 정보 반환(데이터셋id로 검색)|
 |[**GetInfrSttusCd**](Inference.md#GetInfrSttudCd) | **POST** /mrms/get_infr_status_cd |검증 상태 업데이트|
-|[**GetRunInference**](Inference.md#GetRunInference) | **GET** /mrms/get_run_inference |검증 정보 반환(learn_hist_no로 검색)|
+|[**GetRunInference**](Inference.md#GetRunInference) | **GET** /mrms/get_run_inference |검증 상세 정보 반환(learn_hist_no로 검색)|
 |[**UpdateInfrTime**](Inference.md#UpdateInfrTime) | **POST** /mrms/infr_time_update |검증 시작/종료 시각 업데이트|
 |[**InferenceProgress**](Inference.md#InferenceProgress) | **GET** /mrms/inference_progress_rate |검증 진행률 반환|
 |[**InferenceProgress**](Inference.md#InferenceProgress) | **POST** /mrms/inference_progress_rate |검증 진행률 업데이트|
@@ -80,7 +80,7 @@ error : "error"
 
 <a name="GetInferenceInfo"></a>
 # **GetInferenceInfo**
-프로젝트 ID를 통해 수행한 검증에 대한 세부 정보 반환
+프로젝트 ID를 통해 수행한 검증에 대한 상세 정보 반환
 ### Parameters
 ```
 ?project_id=(String)
@@ -91,7 +91,7 @@ error : "error"
 ```
 ### Return Type
 ```
-success : Json Format(String)
+success : Json Format (String)
           {"infr_hist_no": (String),
            "infr_sttus_cd": (String),
            "xai_create_yn": (String),
@@ -104,7 +104,7 @@ error : "error"
 
 <a name="GetInferenceInfoDataset"></a>
 # **GetInferenceInfoDataset**
-데이터셋 ID를 통해 수행한 검증에 대한 세부 정보 반환
+데이터셋 ID를 통해 수행한 검증에 대한 상세 정보 반환
 ### Parameters
 ```
 ?dataset_id=(String)
@@ -115,7 +115,7 @@ error : "error"
 ```
 ### Return Type
 ```
-success : Json Format(String)
+success : Json Format (String)
           {"infr_hist_no": (String),
            "infr_sttus_cd": (String),
            "xai_create_yn": (String),
@@ -145,7 +145,7 @@ error : "error"
 
 <a name="GetRunInference"></a>
 # **GetRunInference**
-학습 HIST 번호를 통해 수행한 검증에 대한 세부 정보 반환
+학습 HIST 번호를 통해 수행한 검증에 대한 상세 정보 반환
 ### Parameters
 ```
 ?learn_hist_no=(String)
@@ -235,7 +235,7 @@ error : "error"
 
 <a name="UpdateInfrResult"></a>
 # **UpdateInfrResult**
-검증 HIST 번호와 검증 정확도, F1-Score 값을 조회하여 검증 결과 업데이트
+검증 HIST 번호에 따른 결과 값(검증 정확도, F1-Score) 업데이트
 ### Parameters
 ```
 ?infr_hist_no=(String)&infr_accuracy=(String)&infr_f1score=(String)
