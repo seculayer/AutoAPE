@@ -6,17 +6,17 @@
 
 |Method|HTTP request|Description|
 |------|------------|-----------|
-|[**GetVarFuncList**](Recommendation.md#GetVarFuncList) | **GET** /mrms/get_cvt_fn |데이터변환 함수 정보 반환|
+|[**GetVarFuncList**](Recommendation.md#GetVarFuncList) | **GET** /mrms/get_cvt_fn |데이터 전처리 함수 정보 반환|
 |[**InsertDPAnalsInfo**](Recommendation.md#InsertDPAnalsInfo) | **POST** /mrms/insert_dp_anls_info |dprs 결과 추가|
 |[**InsertAlgAnlsInfo**](Recommendation.md#InsertAlgAnlsInfo) | **POST** /mrms/insert_alg_anls_info |mars 결과 추가|
-|[**GetAlgorithmInfo**](Recommendation.md#GetAlgorithmInfo) | **GET** /mrms/get_algorithm_info |algorithm 정보 반환|
-|[**GetParamInfo**](Recommendation.md#GetParamInfo) | **GET** /mrms/get_param_info |특정 알고리즘에 대한 hyper parameter 구성 정보 반환|
-|[**InsertMLParamInfo**](Recommendation.md#InsertMLParamInfo) | **POST** /mrms/insert_ml_param_info |프로젝트에서 사용될 파라미터 선택 후 추가|
+|[**GetAlgorithmInfo**](Recommendation.md#GetAlgorithmInfo) | **GET** /mrms/get_algorithm_info |알고리즘 정보 반환|
+|[**GetParamInfo**](Recommendation.md#GetParamInfo) | **GET** /mrms/get_param_info |알고리즘 파라미터 정보 반환|
+|[**InsertMLParamInfo**](Recommendation.md#InsertMLParamInfo) | **POST** /mrms/insert_ml_param_info |ML 파라미터 상세 정보 추가|
 
 
 <a name="GetVarFuncList"></a>
 # **GetVarFuncList**
-데이터변환 함수 정보 반환(변환함수 클래스명, 태그)
+데이터 전처리 함수 정보 반환(전처리함수 클래스명, 태그)
 ### Parameters
 ```
 -
@@ -175,7 +175,7 @@ error : "error"
 
 <a name="GetParamInfo"></a>
 # **GetParamInfo**
-알고리즘 ID를 통해 알고리즘 파라미터 상세 정보 반환(알고리즘 ID, 파라미터 ID, 파라미터 이름 등)
+알고리즘 ID를 통해 특정 알고리즘에 대한 파라미터 상세 정보 반환(알고리즘 ID, 파라미터 ID, 파라미터 이름 등)
 ### Parameters
 ```
 ?alg_id=(String)
@@ -192,7 +192,7 @@ error : "error"
 
 <a name="InsertMLParamInfo"></a>
 # **InsertMLParamInfo**
-알고리즘 추천 후 알고리즘 종류, 코드 등에 대한 상세 정보 추가
+프로젝트에서 사용할 ML 파라미터 상세 정보 추가
 ### Parameters
 ```
 Body: [{"param_id": (String),
