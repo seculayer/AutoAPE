@@ -7,8 +7,8 @@
 |Method|HTTP request|Description|
 |------|------------|-----------|
 [**GetDataAnalsInfo**](DataAnalysis.md#GetDataAnalsInfo) | **POST** /mrms/get_data_anls_info |데이터셋 별 데이터 분석 상세 정보 반환|
-[**InsertDataAnalsInfo**](DataAnalysis.md#InsertDataAnalsInfo) | **POST** /mrms/insert_data_anls_info |데이터 분석 결과 업데이트|
-[**InsertDataAnalsInfo**](DataAnalysis.md#InsertDataAnalsInfo) | **GET** /mrms/insert_data_anls_info |데이터 분석 결과 반환|
+[**InsertDataAnalsInfo**](DataAnalysis.md#InsertDataAnalsInfo) | **POST** /mrms/insert_data_anls_info |데이터 분석 결과 추가|
+[**InsertDataAnalsInfo**](DataAnalysis.md#InsertDataAnalsInfo) | **GET** /mrms/insert_data_anls_info |데이터 분석 결과 추가|
 [**DAWorkerReq**](DataAnalysis.md#DAWorkerReq) | **GET** /request_da_worker |DA Worker 생성요청|
 [**GetFieldUnique**](DataAnalysis.md#GetFieldUnique) | **GET** 	/mrms/get_field_unique |unique 반환|
 [**GetFieldWord**](DataAnalysis.md#GetFieldWord) | **GET** /mrms/get_field_word |word 반환|
@@ -29,7 +29,7 @@ Body: {"dataset_id": (String)}
 ### Return Type
 ```
 success : Json Format (String)
-          {"data_analysis_id": (String),
+      ex) {"data_analysis_id": (String),
            "metadata_json": (JSON format String),
            "label_yn": (String) ,
            "dist_file_cnt": (String),
@@ -39,7 +39,7 @@ error : "error"
 
 <a name="InsertDataAnalsInfo"></a>
 # **InsertDataAnalsInfo**
-데이터 분석 후 결과 업데이트
+데이터 분석 후 데이터 분석 결과에 대한 상세 정보 추가
 ### Parameters
 ```
 Body: {"data_analysis_id": (String),
@@ -159,7 +159,7 @@ error : "error"
 
 <a name="InsertDataAnalsInfo"></a>
 # **InsertDataAnalsInfo**
-데이터셋 ID를 통해 데이터 분석 결과 반환
+데이터셋 ID를 통해 데이터 분석 결과에 대한 상세 정보 추가
 ### Parameters
 ```
 ?dataset_id=(String)
@@ -213,7 +213,7 @@ error : "error"
 ### Return Type
 ```
 success : Json Format (String)
-          {"unique": {
+      ex) {"unique": {
              "0": 549,
              "1": 342
            },
@@ -240,7 +240,7 @@ error : "error"
 ### Return Type
 ```
 success : Json Format (String)
-          {"viewts": 23068,
+      ex) {"viewts": 23068,
            "lq2cr": 2779,
            "pfno": 17481,
            "opg": 3150,
@@ -266,8 +266,7 @@ error : "error"
 ### Return Type
 ```
 success : Json Format (String)
-        [
-          {
+      ex) {
             "mutual_information": [
               0.9607079018756469,
               null,
@@ -293,7 +292,6 @@ success : Json Format (String)
               0.2573065223849618
             ]
           },
-         ... 
-        ]
+         ...
 error : "error"
 ```
