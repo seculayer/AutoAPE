@@ -26,7 +26,7 @@
 Body: {"hist_no": (String),
        "task_idx": (String),
        "status: (String),
-       "message": (String)}
+      }
 ```
 - **hist_no**
 ```
@@ -39,7 +39,12 @@ Body: {"hist_no": (String),
 - **status** 
 ```
 검증상태코드(infr_sttus_cd)
-1(학습요청) / 2(학습대기) / 5(학습진행) / 6(학습완료) / 7(학습에러) 
+
+1(학습요청)
+2(학습대기)
+5(학습진행)
+6(학습완료)
+7(학습에러) 
 ```
 - **message**
 ```
@@ -92,13 +97,14 @@ error : "error"
 ### Return Type
 ```
 success : Json Format (String)
-          {"infr_hist_no": (String),
+      ex) {"infr_hist_no": (String),
            "infr_sttus_cd": (String),
            "xai_create_yn": (String),
            "start_time" : (String),
            "end_time": (String),
            "target_field": (String),
-           ...}
+           ...
+          }
 error : "error"
 ```
 
@@ -116,13 +122,14 @@ error : "error"
 ### Return Type
 ```
 success : Json Format (String)
-          {"infr_hist_no": (String),
+      ex) {"infr_hist_no": (String),
            "infr_sttus_cd": (String),
            "xai_create_yn": (String),
            "start_time" : (String),
            "end_time": (String),
            "target_field": (String),
-           ...}
+           ...
+          }
 error : "error"
 ```
 
@@ -157,11 +164,12 @@ error : "error"
 ### Return Type
 ```
 success : List<Json> Format (String)
-          {"infr_hist_no": (String),
+      ex) [{"infr_hist_no": (String),
            "infr_sttus_cd": (String),
            "start_time": (String),
            "end_time": (String),
            "target_field": (String)}
+          ]
 error : "error"
 ```
 
