@@ -38,13 +38,13 @@ Body: {"hist_no": (String),
 ```
 - **status** 
 ```
-검증상태코드(infr_sttus_cd)
+검증상태 코드(infr_sttus_cd)
 
-1(학습요청)
-2(학습대기)
-5(학습진행)
-6(학습완료)
-7(학습에러) 
+1(검증 요청)
+2(검증 대기)
+5(검증 진행)
+6(검증 완료)
+7(검증 에러) 
 ```
 - **message**
 ```
@@ -96,15 +96,15 @@ error : "error"
 ```
 ### Return Type
 ```
-success : Json Format (String)
-      ex) {"infr_hist_no": (String),
+success : List<Json> Format (String)
+      ex) [{"infr_hist_no": (String),
            "infr_sttus_cd": (String),
            "xai_create_yn": (String),
            "start_time" : (String),
            "end_time": (String),
            "target_field": (String),
-           ...
-          }
+           ...}
+           ]
 error : "error"
 ```
 
@@ -121,15 +121,15 @@ error : "error"
 ```
 ### Return Type
 ```
-success : Json Format (String)
-      ex) {"infr_hist_no": (String),
+success : List<Json> Format (String)
+      ex) [{"infr_hist_no": (String),
            "infr_sttus_cd": (String),
            "xai_create_yn": (String),
            "start_time" : (String),
            "end_time": (String),
            "target_field": (String),
-           ...
-          }
+           ...}
+          ]
 error : "error"
 ```
 
@@ -243,7 +243,7 @@ error : "error"
 
 <a name="UpdateInfrResult"></a>
 # **UpdateInfrResult**
-검증 HIST 번호에 따른 결과 값(검증 정확도, F1-Score) 업데이트
+검증 HIST 번호에 따른 결과 값 업데이트
 ### Parameters
 ```
 ?infr_hist_no=(String)&infr_accuracy=(String)&infr_f1score=(String)
