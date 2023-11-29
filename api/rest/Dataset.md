@@ -25,7 +25,8 @@ Body: {"dataset_id": (String),
        "dataset_size": (String),
        "n_rows": (String),
        "status_cd": (String),
-       "format_json": (JSON format String)}
+       "format_json": (JSON format String),
+       "target_field": (String}
 ```
 - **dataset_id**
 ```
@@ -34,7 +35,10 @@ Body: {"dataset_id": (String),
 - **dataset_format**
 ```
 데이터셋 형태 코드
-1(TEXT) / 2(IMAGE) / 3(TABLE)
+
+1(TEXT)
+2(IMAGE)
+3(TABLE)
 ```
 - **n_cols**
 ```
@@ -51,8 +55,16 @@ Body: {"dataset_id": (String),
 - **status_cd**
 ```
 상태코드
-1(업로드 대기) / 2(업로드 진행) / 3(업로드 완료) / 4(업로드에러) / 5(데이터 분석 요청)
-6(데이터 분석 중) / 7(데이터 분석 완료) / 8(데이터 분석 에러) / 9(데이터 분석 파드 삭제 요청)
+
+1(업로드 대기)
+2(업로드 진행)
+3(업로드 완료)
+4(업로드에러)
+5(데이터 분석 요청)
+6(데이터 분석 중)
+7(데이터 분석 완료)
+8(데이터 분석 에러)
+9(데이터 분석 파드 삭제 요청)
 ```
 - **format_json**
 ```
@@ -60,6 +72,10 @@ Body: {"dataset_id": (String),
 ex) {"file_path": (String),
      "file_nm": (String),
      "field_list": "Survived,Pclass,Sex,SibSp,Parch,Fare"}
+```
+- **target_field**
+```
+지정된 타겟 필드
 ```
 ### Return Type
 ```
@@ -98,18 +114,27 @@ Body : {"dataset_id": (String)}
 - **status_cd**
 ```
 상태코드
-1(업로드 대기) / 2(업로드 진행) / 3(업로드 완료) / 4(업로드에러) / 5(데이터 분석 요청)
-6(데이터 분석 중) / 7(데이터 분석 완료) / 8(데이터 분석 에러) / 9(데이터 분석 파드 삭제 요청)
+
+1(업로드 대기)
+2(업로드 진행)
+3(업로드 완료)
+4(업로드에러)
+5(데이터 분석 요청)
+6(데이터 분석 중)
+7(데이터 분석 완료)
+8(데이터 분석 에러)
+9(데이터 분석 파드 삭제 요청)
 ```
 ### Return Type
 ```
 success : Json Format (String)
-          {"dataset_id": (String),
+      ex) {"dataset_id": (String),
            "dataset_format": (String),
            "n_cols": (String) ,
            "dataset_size": (String),
            "n_rows": (String),
-           ...}
+           ...
+          }
 error : "error"
 ```
 
@@ -128,8 +153,16 @@ Body : {"dataset_id": (String),
 - **status_cd**
 ```
 상태코드
-1(업로드 대기) / 2(업로드 진행) / 3(업로드 완료) / 4(업로드에러) / 5(데이터 분석 요청)
-6(데이터 분석 중) / 7(데이터 분석 완료) / 8(데이터 분석 에러) / 9(데이터 분석 파드 삭제 요청)
+
+1(업로드 대기)
+2(업로드 진행)
+3(업로드 완료)
+4(업로드에러)
+5(데이터 분석 요청)
+6(데이터 분석 중)
+7(데이터 분석 완료)
+8(데이터 분석 에러)
+9(데이터 분석 파드 삭제 요청)
 ```
 ### Return Type
 ```
