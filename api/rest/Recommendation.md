@@ -103,7 +103,7 @@ Body: [{"alg_anal_id": (String),
         "project_id": (String),
         "alg_id": (String),
         "dp_analysis_id": (String),
-        "data_analysis_json": (JSON format String),
+        "metadata_json": (JSON format String),
         "alg_type": (String),
         "alg_json": (JSON format String),
         "algorithm_code": (String)}
@@ -125,9 +125,58 @@ Body: [{"alg_anal_id": (String),
 ```
 데이터 분석 처리 ID
 ```
-- **data_analysis_json**
+- **metadata_json**
 ```
-데이터 분석 처리 JSON(데이터 전처리 함수 정보 포함)
+메타데이터 JSON(데이터 분석 결과 정보)
+ex) {
+      "dataset_meta": {
+        "features": 6,
+        "instances": 891
+      },
+      "file_num_line": [
+        891
+      ],
+      "file_list": [
+        (String)
+      ],
+      "meta": [
+        {
+          "field_nm": "Survived",
+          "field_idx": 0,
+          "field_type": "int",
+          "type_stat": {
+            "null": 0,
+            "int": 891,
+            "float": 0,
+            "string": 0,
+            "date": 0,
+            "list": 0
+          },
+          "statistics": {
+            "average": 0.3838383838383838,
+            "max": 1,
+            "min": 0,
+            "sum": 342,
+            "unique": {
+              "unique": {
+                "0": 549,
+                "1": 342
+              },
+              "unique_count": 2
+            },
+            "is_category": "True",
+            "valueratio": {
+              "0": 0.62,
+              "1": 0.38
+            },
+            "variance": 0.2365064789307223,
+            "std_dev": 0.48631931786710086,
+            "kurtosis": -1.7717860224331479,
+            "skewness": 0.47771746625684985
+          }
+        },
+     ... 
+    }
 ```
 - **alg_type**
 ```
