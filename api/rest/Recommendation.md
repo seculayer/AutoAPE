@@ -16,7 +16,7 @@
 
 <a name="GetVarFuncList"></a>
 # **GetVarFuncList**
-데이터 전처리 함수 정보 반환(전처리함수 클래스명, 태그)
+데이터 전처리 함수 정보 반환(conv_func_cls:전처리함수 클래스명, conv_func_tag:태그)
 ### Parameters
 ```
 -
@@ -52,8 +52,7 @@ Body: [{"dp_analysis_id": (String),
 - **data_analysis_json**
 ```
 데이터 분석 처리 JSON(데이터 전처리 함수 정보 포함)
-ex) [
-      {
+ex) {
         "name": "Survived",
         "field_sn": 0,
         "field_type": "int",
@@ -79,10 +78,7 @@ ex) [
           "std_dev": 0.48631931786710086,
           "kurtosis": -1.7717860224331479,
           "skewness": 0.47771746625684985
-        }
-      },
-      ...
-    ]
+    }
 ```
 - **data_analysis_id**
 ```
@@ -180,15 +176,15 @@ ex) {
 ```
 - **alg_type**
 ```
-알고리즘 종류
+알고리즘종류
 
-1(Classifier)
-2(Regressor)
-3(Clustering)
-4(Word Embedding)
-5(Feature Extraction)
-7(Outlier Detection)
-10(Trend Analysis)
+1: Classifier
+2: Regressor
+3: Clustering
+4: Word Embedding
+5: Feature Extraction
+7: Outlier Detection
+10: Trend Analysis
 ```
 - **alg_json**
 ```
@@ -196,12 +192,12 @@ ex) {
 ```
 - **algorithm_code**
 ```
-알고리즘 코드
+알고리즘코드
 
-1(Tensorflow)
-2(Tensorflow-Keras)
-4(Gensim)
-5(Scikit-Learn)
+1: Tensorflow
+2: Tensorflow-Keras
+4: Gensim
+5: Scikit-Learn
 ```
 ### Return Type
 ```
@@ -211,7 +207,7 @@ error : "error"
 
 <a name="GetAlgorithmInfo"></a>
 # **GetAlgorithmInfo**
-알고리즘 정보 반환(알고리즘 ID, 알고리즘명, 알고리즘 종류)
+알고리즘 정보 반환(alg_id:알고리즘 ID, alg_nm:알고리즘명, alg_type:알고리즘 종류)
 ### Parameters
 ```
 -
@@ -224,7 +220,7 @@ error : "error"
 
 <a name="GetParamInfo"></a>
 # **GetParamInfo**
-알고리즘 ID를 통해 특정 알고리즘에 대한 파라미터 상세 정보 반환(알고리즘 ID, 파라미터 ID, 파라미터 이름 등)
+알고리즘 ID를 통해 특정 알고리즘에 대한 파라미터 상세 정보 반환(alg_id:알고리즘 ID, param_id:파라미터 ID, param_name:파라미터 이름 등)
 ### Parameters
 ```
 ?alg_id=(String)
