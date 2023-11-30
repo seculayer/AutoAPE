@@ -86,7 +86,6 @@ Body: {"project_id" : (String),
  "early_key" : (string),   # "accuracy" or "loss" or "val_loss" or "val_accuracy"
  "early_value" : (float),  # 0에서 1 사이의 수
  "minsteps" : (int)}       # 최소 스텝 수
-}
 ```
 - **tag**
 ```
@@ -224,7 +223,7 @@ error : "error"
 <a name="UpdateTime"></a>
 # **UpdateTime**
 모델 학습 시간을 실시간으로 해당 메소드 요청을 통해 업데이트
-<br> type에 따라서 검증 시작(updateStartInfrTime)과 검증 종료(updateEndInfrTime) 각각 진행
+<br> type에 따라서 학습 시작(updateStartInfrTime)과 학습 종료(updateEndInfrTime) 각각 진행
 ### Parameters
 ```
 Body: {"type": (String),
