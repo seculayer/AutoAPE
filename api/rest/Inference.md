@@ -10,7 +10,7 @@
 |[**InferenceCreate**](Inference.md#InferenceCreate) | **GET** /mrms/inference_create |검증 생성|
 |[**GetInferenceInfo**](Inference.md#GetInferenceInfo) | **GET** /mrms/get_inference_info |검증 상세 정보 반환(프로젝트 ID로 검색)|
 |[**GetInferenceInfoDataset**](Inference.md#GetInferenceInfoDataset) | **GET** /mrms/get_inference_info_dataset |검증 상세 정보 반환(데이터셋 ID로 검색)|
-|[**GetInfrSttusCd**](Inference.md#GetInfrSttudCd) | **POST** /mrms/get_infr_status_cd |검증 상태 업데이트|
+|[**GetInfrSttusCd**](Inference.md#GetInfrSttusCd) | **POST** /mrms/get_infr_status_cd |검증 상태 업데이트|
 |[**GetRunInference**](Inference.md#GetRunInference) | **GET** /mrms/get_run_inference |검증 상세 정보 반환(학습 Hist 번호로 검색)|
 |[**UpdateInfrTime**](Inference.md#UpdateInfrTime) | **POST** /mrms/infr_time_update |검증 시작/종료 시각 업데이트|
 |[**InferenceProgress**](Inference.md#InferenceProgress) | **GET** /mrms/inference_progress_rate |검증 진행률 반환|
