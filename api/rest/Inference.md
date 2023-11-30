@@ -25,8 +25,8 @@
 ```
 Body: {"hist_no": (String),
        "task_idx": (String),
-       "sttus_cd": (String)
-      }
+       "sttus_cd": (String),
+       "message": (String)}
 ```
 - **hist_no**
 ```
@@ -36,15 +36,15 @@ Body: {"hist_no": (String),
 ```
 이슈워커인덱스(issue_task_idx)
 ```
-- **status** 
+- **sttus_cd** 
 ```
-검증상태 코드(infr_sttus_cd)
+검증상태코드(infr_sttus_cd)
 
-1(검증 요청)
-2(검증 대기)
-5(검증 진행)
-6(검증 완료)
-7(검증 에러) 
+1: 검증 요청
+2: 검증 대기
+5: 검증 진행
+6: 검증 완료
+7: 검증 에러 
 ```
 - **message**
 ```
@@ -184,7 +184,8 @@ Body: {"type": (String),
 ```
 - **type**
 ```
-"start" 또는 "end"
+"start": 시작시간
+"end": 종료시간
 ```
 - **hist_no** 
 ``` 
