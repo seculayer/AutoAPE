@@ -26,7 +26,7 @@ Body: {"dataset_id": (String),
        "n_rows": (String),
        "status_cd": (String),
        "format_json": (JSON format String),
-       "target_field": (String}
+       "target_field": (String)}
 ```
 - **dataset_id**
 ```
