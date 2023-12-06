@@ -66,6 +66,9 @@ kubeadm config images pull
 sudo kubeadm init --apiserver-advertise-address={kubernetes 마스터의IP}
 ```
 #### Plugins
+```shell
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+```
 #### DB Server
 #### MRMS
 
