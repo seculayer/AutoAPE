@@ -1,2 +1,5 @@
 # AutoAPE Development Guide
-> 추후 업데이트 예정입니다.
+> 
+| For | Type | Description |
+| --- | ---- | ----------- |
+| Dev | [**RegisterConvFunc**](./RegisterConvFunc.md) | 변환함수 등록 방법 가이드 |
