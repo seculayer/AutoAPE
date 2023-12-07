@@ -103,12 +103,12 @@ kubectl label nodes {Master의 Hostname} master=true
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 ```
 #### Plugins
-- calico
+##### calico
 ```shell
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 ```
 
-- gpushare
+##### gpushare
 <details>
 <summary>device-plugin-ds.yaml</summary>
 
