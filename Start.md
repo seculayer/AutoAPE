@@ -64,7 +64,22 @@ kubeadm config images pull
 ### Register Hostname
 ```shell
 sudo echo "{Master의 IP 주소} {Master의 Hostname}" | sudo tee -a /etc/hosts
-sudo echo "{DB Server의 IP 주소} {DB Server의 Hostname}" | sudo tee -a /etc/hosts
+sudo echo "{DB Server의 IP 주소} database.eyecloudai" | sudo tee -a /etc/hosts
+# sudo echo "{Master의 IP 주소} registry.seculayer.com" | sudo tee -a /etc/hosts
+```
+
+### Make Directory
+```shell
+sudo mkdir -p /eyeCloudAI/app/ape/custom/cnvrtr
+sudo mkdir -p /eyeCloudAI/data/processing/ape/jobs
+sudo mkdir -p /eyeCloudAI/data/processing/ape/da
+sudo mkdir -p /eyeCloudAI/data/processing/ape/errors
+sudo mkdir -p /eyeCloudAI/data/processing/ape/results
+sudo mkdir -p /eyeCloudAI/data/processing/ape/rtdetect
+sudo mkdir -p /eyeCloudAI/data/processing/ape/temp
+sudo mkdir -p /eyeCloudAI/data/processing/ape/division
+sudo mkdir -p /eyeCloudAI/data/processing/ape/detects
+sudo mkdir -p /eyeCloudAI/data/storage/ape/models
 ```
 
 ### Server Module Install
@@ -88,12 +103,12 @@ kubectl label nodes {Master의 Hostname} master=true
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 ```
 #### Plugins
-####### calico
+- calico
 ```shell
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 ```
 
-####### gpushare
+- gpushare
 <details>
 <summary>device-plugin-ds.yaml</summary>
 
@@ -474,11 +489,993 @@ extenders:
 </details>
 
 ```shell
+# Gpushare Image Pull
+# docker pull seculayer/gpushare-scheduler-extender:2.0
+# docker pull seculayer/gpushare-device-plugin:2.0
 
+# Gpushare Start
+kubectl apply -f device-plugin-ds.yaml
+kubectl apply -f device-plugin-rbac.yaml
+kubectl apply -f gpushare-schd-extender.yaml
+
+# Gpushare Config Apply
+sudo cp scheduler-policy-config.yaml /etc/kubernetes/scheduler-policy-config.yaml
+sudo cp kube-scheduler.yaml /etc/kubernetes/manifests/kube-scheduler.yaml
 ```
 
-#### DB Server
-#### MRMS
+<!-- - registry
+<details>
+<summary>registry-deploy.yaml</summary>
 
-## 접은 제목
-접은 내용
+```yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-registry
+  labels:
+    app: docker-registry
+  namespace: [@namespace]
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-registry
+  template:
+    metadata:
+      labels:
+        app: docker-registry
+    spec:
+      containers:
+        - name: docker-registry
+          image: registry:2.7.1
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: docker-images
+              mountPath: /var/lib/registry/docker/registry/v2
+            - name: timezone-config
+              mountPath: /etc/localtime
+      volumes:
+        - name: docker-images
+          hostPath:
+            path: [@app_dir]/data/storage/docker-images
+            type: Directory
+        - name: timezone-config
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Seoul
+      nodeSelector:
+        deploy: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: docker-registry
+  name: docker-registry-svc
+  namespace: [@namespace]
+spec:
+  type: NodePort
+  selector:
+    app: docker-registry
+  #    release: docker-registry
+  ports:
+    - name: docker-registry-http
+      port: 5000
+      protocol: TCP
+      targetPort: 5000
+      nodePort: 31500
+---
+```
+</details> -->
+
+#### Namespace
+<details>
+<summary>ml-namespace.yaml</summary>
+
+```yaml
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apeautoml
+---
+```
+</details>
+
+```shell
+kubectl apply -f ml-namespace.yaml
+```
+#### DB Server
+<details>
+<summary>ml-db-deploy.yaml (* DB 폴더 경로 수정 필요)</summary>
+
+```yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apeautoml-db
+  labels:
+    app: apeautoml-db
+  namespace: apeautoml
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apeautoml-db
+  template:
+    metadata:
+      labels:
+        app: apeautoml-db
+    spec:
+      containers:
+        - name: apeautoml-db
+          image: seculayer/ape-db:1.0.0
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/mysql
+            - name: timezone-config
+              mountPath: /etc/localtime
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-user
+                  key: password
+            - name: MYSQL_DATABASE
+              value: APEAutoML
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-user
+                  key: username
+            - name: MYSQL_ROOT_HOST
+              value: '%'
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-user
+                  key: password
+      volumes:
+        - name: db-data
+          hostPath:
+            path: {DB 폴더 경로}
+            type: Directory
+        - name: timezone-config
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Seoul
+      nodeSelector:
+        db: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apeautoml-db
+  name:  apeautoml-db-svc
+  namespace: apeautoml
+spec:
+  type: NodePort
+  selector:
+    app:  apeautoml-db
+  ports:
+    - name: apeautoml-db
+      port: 3306
+      protocol: TCP
+      targetPort: 3306
+      nodePort: 30306
+---
+```
+</details>
+
+```shell
+# Create DB Config Folder(User Permission)
+mkdir -p {DB 폴더 경로}
+
+# Create Secret
+kubectl create secret generic mariadb-user --from-literal=username={DB User Name} --from-literal=password={DB Password} --namespace=apeautoml
+
+# Image Pull
+# docker pull seculayer/ape-db:1.0.0
+
+# DB Start
+kubectl apply -f ml-db-deploy.yaml
+```
+
+#### Configmap
+<details>
+<summary>APEFlow</summary>
+
+apeflow-conf.xml
+```xml
+<configuration>
+    <property>
+        <name>app_dir</name>
+        <value>/eyeCloudAI</value>
+        <description>Application root directory</description>
+    </property>
+    <property>
+        <name>dir_processing</name>
+        <value>/processing/ape</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>dir_temp</name>
+        <value>/temp</value>
+        <description>None</description>
+    </property>
+    <!-- log setting -->
+    <property>
+        <name>dir_log</name>
+        <value>/eyeCloudAI/logs</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>log_name</name>
+        <value>ApeFlow</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>log_level</name>
+        <value>INFO</value>
+        <description>[INFO, DEBUG, WARN, ERROR, CRITICAL]</description>
+    </property>
+    <property>
+        <name>mrms_svc</name>
+        <value>mrms-svc</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>mrms_sftp_port</name>
+        <value>10022</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>mrms_rest_port</name>
+        <value>9200</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>mrms_username</name>
+        <value>{Master 서버 유저명(AES256 암호화)}</value>
+    </property>
+    <property>
+        <name>mrms_password</name>
+        <value>{Master 서버 유저 비밀번호(AES256 암호화)}</value>
+    </property>
+    <property>
+        <name>batch_size</name>
+        <value>1024</value>
+    </property>
+</configuration>
+```
+</details>
+
+<details>
+<summary>DA</summary>
+
+da-conf.xml
+```xml
+<configuration>
+    <!-- app path setting -->
+    <property>
+        <name>dir_data_root</name>
+        <value>/eyeCloudAI/data</value>
+        <description>Data root directory</description>
+    </property>
+    <!-- log setting -->
+    <property>
+        <name>dir_log</name>
+        <value>/eyeCloudAI/logs</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>log_name</name>
+        <value>DataAnalyzer</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>log_level</name>
+        <value>INFO</value>
+        <description>[INFO, DEBUG, WARN, ERROR, CRITICAL]</description>
+    </property>
+    <!-- hosts -->
+    <property>
+        <name>storage_svc</name>
+        <value>mrms-svc</value>
+    </property>
+    <property>
+        <name>storage_sftp_port</name>
+        <value>10022</value>
+    </property>
+    <property>
+        <name>storage_ssh_username</name>
+        <value>{Master 서버 유저명(AES256 암호화)}</value>
+    </property>
+    <property>
+        <name>storage_ssh_password</name>
+        <value>{Master 서버 유저 비밀번호(AES256 암호화)}</value>
+    </property>
+    <property>
+        <name>mrms_svc</name>
+        <value>mrms-svc</value>
+    </property>
+    <property>
+        <name>mrms_sftp_port</name>
+        <value>10022</value>
+    </property>
+    <property>
+        <name>mrms_rest_port</name>
+        <value>9200</value>
+    </property>
+    <property>
+        <name>mrms_ssh_username</name>
+        <value>{Master 서버 유저명(AES256 암호화)}</value>
+    </property>
+    <property>
+        <name>mrms_ssh_password</name>
+        <value>{Master 서버 유저 비밀번호(AES256 암호화)}</value>
+    </property>
+    <property>
+        <name>text_distribute_instances</name>
+        <value>100000</value>
+    </property>
+    <property>
+        <name>image_distribute_instances</name>
+        <value>1024</value>
+        <description>MB</description>
+    </property>
+    <property>
+        <name>worker_waiting_timeout</name>
+        <value>86400</value>
+        <description>seconds</description>
+    </property>
+    <property>
+        <name>write_cycle_history</name>
+        <value>False</value>
+        <description>True or False</description>
+    </property>
+</configuration>
+```
+</details>
+
+<details>
+<summary>DPRS</summary>
+
+dprs-conf.xml
+```xml
+<configuration>
+    <!-- app path setting -->
+    <property>
+        <name>dir_data_root</name>
+        <value>/eyeCloudAI/data</value>
+        <description>Data root directory</description>
+    </property>
+    <property>
+        <name>ape.features.dir</name>
+        <value>/processing/ape/division</value>
+    </property>
+    <!-- log setting -->
+    <property>
+        <name>dir_log</name>
+        <value>/eyeCloudAI/logs</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>log_name</name>
+        <value>DataProcessRecommender</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>log_level</name>
+        <value>INFO</value>
+        <description>[INFO, DEBUG, WARN, ERROR, CRITICAL]</description>
+    </property>
+    <!-- hosts -->
+    <property>
+        <name>mrms_svc</name>
+        <value>mrms-svc</value>
+    </property>
+    <property>
+        <name>mrms_sftp_port</name>
+        <value>10022</value>
+    </property>
+    <property>
+        <name>mrms_rest_port</name>
+        <value>9200</value>
+    </property>
+    <property>
+        <name>mrms_username</name>
+        <value>{Master 서버 유저명(AES256 암호화)}</value>
+    </property>
+    <property>
+        <name>mrms_password</name>
+        <value>{Master 서버 유저 비밀번호(AES256 암호화)}</value>
+    </property>
+    <!-- recommend -->
+    <property>
+        <name>rcmd_min_count</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>rcmd_max_count</name>
+        <value>2</value>
+    </property>
+</configuration>
+
+```
+</details>
+
+<details>
+<summary>HPRS</summary>
+
+hprs-conf.xml
+```xml
+<configuration>
+    <!-- app path setting -->
+    <property>
+        <name>dir_data_root</name>
+        <value>/eyeCloudAI/data</value>
+        <description>Data root directory</description>
+    </property>
+    <!-- log setting -->
+    <property>
+        <name>dir_log</name>
+        <value>/eyeCloudAI/logs</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>log_name</name>
+        <value>HyperParameterRecommender</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>log_level</name>
+        <value>INFO</value>
+        <description>[INFO, DEBUG, WARN, ERROR, CRITICAL]</description>
+    </property>
+    <!-- hosts -->
+    <property>
+        <name>mrms_svc</name>
+        <value>mrms-svc</value>
+    </property>
+    <property>
+        <name>mrms_sftp_port</name>
+        <value>10022</value>
+    </property>
+    <property>
+        <name>mrms_rest_port</name>
+        <value>9200</value>
+    </property>
+    <property>
+        <name>mrms_username</name>
+        <value>{Master 서버 유저명(AES256 암호화)}</value>
+    </property>
+    <property>
+        <name>mrms_password</name>
+        <value>{Master 서버 유저 비밀번호(AES256 암호화)}</value>
+    </property>
+    <!-- recommend -->
+    <property>
+        <name>rcmd_min_count</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>rcmd_max_count</name>
+        <value>2</value>
+    </property>
+</configuration>
+
+```
+</details>
+
+<details>
+<summary>MARS</summary>
+
+mars-conf.xml
+```xml
+<configuration>
+    <!-- app path setting -->
+    <property>
+        <name>dir_data_root</name>
+        <value>/eyeCloudAI/data</value>
+        <description>Data root directory</description>
+    </property>
+    <property>
+        <name>ape.features.dir</name>
+        <value>/processing/ape/division</value>
+    </property>
+    <!-- log setting -->
+    <property>
+        <name>dir_log</name>
+        <value>/eyeCloudAI/logs</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>log_name</name>
+        <value>MLAlgRecommender</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>log_level</name>
+        <value>INFO</value>
+        <description>[INFO, DEBUG, WARN, ERROR, CRITICAL]</description>
+    </property>
+    <!-- hosts -->
+    <property>
+        <name>mrms_svc</name>
+        <value>mrms-svc</value>
+    </property>
+    <property>
+        <name>mrms_sftp_port</name>
+        <value>10022</value>
+    </property>
+    <property>
+        <name>mrms_rest_port</name>
+        <value>9200</value>
+    </property>
+    <property>
+        <name>mrms_username</name>
+        <value>{Master 서버 유저명(AES256 암호화)}</value>
+    </property>
+    <property>
+        <name>mrms_password</name>
+        <value>{Master 서버 유저 비밀번호(AES256 암호화)}</value>
+    </property>
+    <!-- recommend -->
+    <property>
+        <name>rcmd_min_count</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>rcmd_max_count</name>
+        <value>2</value>
+    </property>
+</configuration>
+
+```
+</details>
+
+<details>
+<summary>MLPS</summary>
+
+mlps-conf.xml
+```xml
+<configuration>
+    <!-- app path setting -->
+    <property>
+        <name>mlps_version</name>
+        <value>3.0.0</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>app_dir</name>
+        <value>/eyeCloudAI</value>
+        <description>Application root directory</description>
+    </property>
+    <property>
+        <name>app_modules</name>
+        <value>/app/ape/mlps</value>
+        <description>None</description>
+    </property>
+    <!-- data path setting -->
+    <property>
+        <name>dir_resources</name>
+        <value>/resources</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>dir_data_root</name>
+        <value>/data</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>dir_processing</name>
+        <value>/processing/ape</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>dir_job</name>
+        <value>/jobs</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>dir_storage</name>
+        <value>/storage/ape</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>dir_result</name>
+        <value>/results</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>dir_temp</name>
+        <value>/temp</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>dir_error</name>
+        <value>/errors</value>
+        <description>None</description>
+    </property>
+    <!-- log setting -->
+    <property>
+        <name>log_dir</name>
+        <value>/logs</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>log_name</name>
+        <value>MLProcessingServer</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>log_level</name>
+        <value>INFO</value>
+        <description>[INFO, DEBUG, WARN, ERROR, CRITICAL]</description>
+    </property>
+    <!-- rest url setting -->
+    <property>
+        <name>mrms_svc</name>
+        <value>mrms-svc</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>mrms_sftp_port</name>
+        <value>10022</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>mrms_rest_port</name>
+        <value>9200</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>mrms_username</name>
+        <value>{Master 서버 유저명(AES256 암호화)}</value>
+    </property>
+    <property>
+        <name>mrms_password</name>
+        <value>{Master 서버 유저 비밀번호(AES256 암호화)}</value>
+    </property>
+    <property>
+        <name>etls_wating_time</name>
+        <value>5</value>
+        <description>Seconds</description>
+    </property>
+    <property>
+        <name>cvt_data</name>
+        <value>false</value>
+        <description>true or false</description>
+    </property>
+</configuration>
+
+```
+</details>
+
+<details>
+<summary>MRMS</summary>
+
+mrms-conf.xml
+```xml
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"  href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>ape.job.dir</name>
+    <value>/eyeCloudAI/data/processing/ape/jobs</value>
+  </property>
+  <property>
+    <name>ape.da.dir</name>
+    <value>/eyeCloudAI/data/processing/ape/da</value>
+  </property>
+  <property>
+    <name>ape.model.dir</name>
+    <value>/eyeCloudAI/data/storage/ape</value>
+  </property>
+  <property>
+    <name>kubernetes.log.debug.yn</name>
+    <value>N</value>
+  </property>
+  <property>
+    <name>use.learning.schedule</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>use.inference.schedule</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>use.data.analysis.schedule</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>kube.pod.cpu.limit</name>
+    <value>1200</value>
+    <description>m</description>
+  </property>
+  <property>
+    <name>kube.pod.memory.limit</name>
+    <value>0</value>
+    <description>Gi</description>
+  </property>
+  <property>
+    <name>kube.pod.cpu.limit.ratio</name>
+    <value>0.5</value>
+    <description>0-1 float value</description>
+  </property>
+  <property>
+    <name>gpu.mem.unit</name>
+    <value>MiB</value>
+    <description>MiB or GiB</description>
+  </property>
+  <property>
+    <name>gpu_mem_limit_inference</name>
+    <value>1169</value>
+    <description>Integer(MiB or GiB)</description>
+  </property>
+  <property>
+    <name>gpu_mem_limit_learn</name>
+    <value>2048</value>
+    <description>Integer(MiB or GiB)</description>
+  </property>
+  <property>
+    <name>global_steps</name>
+    <value>50</value>
+    <description>epoch</description>
+  </property>
+  <property>
+    <name>remove_ttl_time</name>
+    <value>648000</value>
+    <description>seconds(integer)</description>
+  </property>
+  <property>
+    <name>jobfile.remove.boolean</name>
+    <value>false</value>
+    <description>true/false</description>
+  </property>
+  <property>
+    <name>registry.url</name>
+    <value>registry.seculayer.com:31500/ape</value>
+    <description>Registry URL</description>
+  </property>
+  <property>
+    <name>da.tag</name>
+    <value>4.0-2023.4</value>
+    <description>DA Module Version</description>
+  </property>
+  <property>
+    <name>dprs.tag</name>
+    <value>4.0-2023.3</value>
+    <description>DPRS Module Version</description>
+  </property>
+  <property>
+    <name>mars.tag</name>
+    <value>4.0-2023.4</value>
+    <description>MARS Module Version</description>
+  </property>
+  <property>
+    <name>hprs.tag</name>
+    <value>4.0-2023.3</value>
+    <description>HPRS Module Version</description>
+  </property>
+  <property>
+    <name>mlps.tag</name>
+    <value>4.0-2023.4</value>
+    <description>MLPS Module Version</description>
+  </property>
+  <property>
+    <name>xai.tag</name>
+    <value>4.0-2023.4</value>
+    <description>XAI Module Version</description>
+  </property>
+</configuration>
+```
+db.properties
+```properties
+jdbc.driver=org.mariadb.jdbc.Driver
+jdbc.url=jdbc:mariadb://apeautoml-db-svc:3306/APEAutoML?autoReconnect=true
+jdbc.username={DB User Name}
+jdbc.password={DB Password}
+jdbc.poolMaxActive=20
+jdbc.poolMaxIdle=10
+jdbc.poolTimeToWait=5000
+```
+
+log4j2.properties
+```properties
+status = error
+dest = err
+name = eyeCloudAI mrms log
+
+property.logDir = /eyeCloudAI/logs/
+property.appname = mrms
+
+appenders = console, rolling
+
+appender.console.type = Console
+appender.console.name = STDOUT
+appender.console.layout.type = PatternLayout
+appender.console.layout.pattern = %d{ISO8601} %p %t %c{1} - %m%n
+
+appender.rolling.type = RollingFile
+appender.rolling.name = LogToRollingFile
+appender.rolling.fileName = ${logDir}/${appname}.log
+appender.rolling.filePattern = ${logDir}/${appname}-%d{yyyy-MM-dd}.log.zip
+appender.rolling.layout.type = PatternLayout
+appender.rolling.layout.pattern = %d{ISO8601} %p %t %c{1} - %m%n
+appender.rolling.policies.type = Policies
+appender.rolling.policies.time.type = TimeBasedTriggeringPolicy
+appender.rolling.policies.time.interval = 1
+
+loggers = seculayer, jetty, ibatis, quartz
+
+logger.seculayer.name = com.seculayer
+logger.seculayer.level = info
+logger.seculayer.additivity = false
+logger.seculayer.appenderRef.rolling.ref = LogToRollingFile
+logger.seculayer.appenderRef.stdout.ref = STDOUT
+
+logger.jetty.name = org.eclipse.jetty
+logger.jetty.level = warn
+logger.jetty.additivity = false
+logger.jetty.appenderRef.stdout.ref = STDOUT
+
+logger.ibatis.name = org.apache.ibatis
+logger.ibatis.level = warn
+logger.ibatis.additivity = false
+logger.ibatis.appenderRef.stdout.ref = STDOUT
+
+logger.quartz.name = org.quartz
+logger.quartz.level = warn
+logger.quartz.additivity = false
+logger.quartz.appenderRef.stdout.ref = STDOUT
+
+logger.apache.name = org.apache.http
+logger.apache.level = warn
+logger.apache.additivity = false
+logger.apache.appenderRef.stdout.ref = STDOUT
+
+rootLogger.level = info
+rootLogger.appenderRef.stdout.ref = STDOUT
+
+```
+</details>
+
+```shell
+# Create Configmap
+kubectl create configmap apeflow-conf --from-file=apeflow-conf.xml -n apeautoml
+kubectl create configmap da-conf --from-file=da-conf.xml -n apeautoml
+kubectl create configmap dprs-conf --from-file=dprs-conf.xml -n apeautoml
+kubectl create configmap mars-conf --from-file=mars-conf.xml -n apeautoml
+kubectl create configmap hprs-conf --from-file=hprs-conf.xml -n apeautoml
+kubectl create configmap mars-conf --from-file=mars-conf.xml -n apeautoml
+kubectl create configmap mlps-conf --from-file=mlps-conf.xml -n apeautoml
+kubectl create configmap mrms-conf --from-file=mrms-conf.xml --from-file=db.properties --from-file=log4j2.properties -n apeautoml
+```
+
+#### MRMS
+<details>
+<summary>mrms-deploy.yaml</summary>
+
+```yaml
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mrms-user
+  namespace: apeautoml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: mrms-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: mrms-user
+    namespace: apeautoml
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mrms-svc
+  namespace: apeautoml
+spec:
+  type: NodePort
+  ports:
+    - name: "ssh"
+      port: 10022
+      targetPort: 9100
+      nodePort: 30022
+    - name: "mrms-servlet"
+      port: 9200
+      targetPort: 9200
+      nodePort: 31920
+  selector:
+    app: mrms
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mrms
+  labels:
+    app: mrms
+  namespace: apeautoml
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mrms
+  template:
+    metadata:
+      labels:
+        app: mrms
+    spec:
+      serviceAccountName: mrms-user
+      containers:
+        - name: mrms
+          image: seculayer/automl-mrms:4.0-2023.4
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9200
+          command: ["/bin/bash", "./mrms.sh"]
+          env:
+            - name: TZ
+              value: Asia/Seoul
+          volumeMounts:
+            - name: timezone-config
+              mountPath: /etc/localtime
+            - name: automl-processing
+              mountPath: /eyeCloudAI/data/processing
+            - name: automl-storage
+              mountPath: /eyeCloudAI/data/storage/ape
+            - name: mrms-conf-v
+              mountPath: /eyeCloudAI/app/ape/mrms/conf
+
+        - name: mrms-sftp
+          image: seculayer/sftp-server:1.0.0
+          ports:
+            - containerPort: 9100
+          command: ["/entrypoint", "eyecloudai:eyecloudai!23:1000"]
+          volumeMounts:
+            - name: timezone-config
+              mountPath: /etc/localtime
+            - name: automl-processing
+              mountPath: /eyeCloudAI/data/processing
+            - name: automl-storage
+              mountPath: /eyeCloudAI/data/storage/ape
+
+      volumes:
+        - name: automl-processing
+          hostPath:
+            path: /eyeCloudAI/data/processing
+        - name: automl-storage
+          hostPath:
+            path: /eyeCloudAI/data/storage/ape
+        - name: timezone-config
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Seoul
+        - name: mrms-conf-v
+          configMap:
+            name: mrms-conf
+      nodeSelector:
+        app: "true"
+        master: "true"
+---
+```
+</details>
+
+```shell
+# MRMS Start
+kubectl apply -f mrms-deploy.yaml
+```
