@@ -63,6 +63,7 @@ kubeadm config images pull
 ```
 ### Register Hostname
 ```shell
+* IP 주소, Hostname 수정 필요 
 sudo echo "{Master의 IP 주소} {Master의 Hostname}" | sudo tee -a /etc/hosts
 sudo echo "{DB Server의 IP 주소} database.eyecloudai" | sudo tee -a /etc/hosts
 # sudo echo "{Master의 IP 주소} registry.seculayer.com" | sudo tee -a /etc/hosts
@@ -84,6 +85,7 @@ sudo mkdir -p /eyeCloudAI/data/storage/ape/models
 
 ### Server Module Install
 ```shell
+* IP 주소 수정 필요 
 sudo kubeadm init --apiserver-advertise-address={kubernetes 마스터의IP}
 sudo mkdir -p "${HOME}"/.kube
 sudo cp -i /etc/kubernetes/admin.conf "${HOME}"/.kube/config
@@ -92,7 +94,7 @@ sudo chown "$(id -u)":"$(id -g)" "${HOME}"/.kube/config
 
 ### Node Setting
 ```shell
-# Node Label
+# Node Label (* Hostname 수정 필요)
 kubectl label nodes {Master의 Hostname} deploy=true
 kubectl label nodes {Master의 Hostname} app=true
 kubectl label nodes {Master의 Hostname} gpushare=true
@@ -672,7 +674,7 @@ spec:
 </details>
 
 ```shell
-# Create DB Config Folder(User Permission)
+# Create DB Config Folder(User Permission)(* DB 폴더 경로 수정 필요) 
 mkdir -p {DB 폴더 경로}
 
 # Create Secret
@@ -687,7 +689,7 @@ kubectl apply -f ml-db-deploy.yaml
 
 #### Configmap
 <details>
-<summary>APEFlow</summary>
+<summary>APEFlow(* Master 서버 유저명, 비밀번호 수정 필요)</summary>
 
 apeflow-conf.xml
 ```xml
@@ -755,7 +757,7 @@ apeflow-conf.xml
 </details>
 
 <details>
-<summary>DA</summary>
+<summary>DA(* Master 서버 유저명, 비밀번호 수정 필요)</summary>
 
 da-conf.xml
 ```xml
@@ -843,7 +845,7 @@ da-conf.xml
 </details>
 
 <details>
-<summary>DPRS</summary>
+<summary>DPRS(* Master 서버 유저명, 비밀번호 수정 필요)</summary>
 
 dprs-conf.xml
 ```xml
@@ -910,7 +912,7 @@ dprs-conf.xml
 </details>
 
 <details>
-<summary>HPRS</summary>
+<summary>HPRS(* Master 서버 유저명, 비밀번호 수정 필요)</summary>
 
 hprs-conf.xml
 ```xml
@@ -973,7 +975,7 @@ hprs-conf.xml
 </details>
 
 <details>
-<summary>MARS</summary>
+<summary>MARS(* Master 서버 유저명, 비밀번호 수정 필요)</summary>
 
 mars-conf.xml
 ```xml
@@ -1040,7 +1042,7 @@ mars-conf.xml
 </details>
 
 <details>
-<summary>MLPS</summary>
+<summary>MLPS(* Master 서버 유저명, 비밀번호 수정 필요)</summary>
 
 mlps-conf.xml
 ```xml
@@ -1158,7 +1160,7 @@ mlps-conf.xml
 </details>
 
 <details>
-<summary>MRMS</summary>
+<summary>MRMS(* DB User Name, Password 수정 필요)</summary>
 
 mrms-conf.xml
 ```xml
@@ -1240,7 +1242,7 @@ mrms-conf.xml
   </property>
   <property>
     <name>registry.url</name>
-    <value>registry.seculayer.com:31500/ape</value>
+    <value>seculayer</value>
     <description>Registry URL</description>
   </property>
   <property>
