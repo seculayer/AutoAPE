@@ -1,5 +1,12 @@
 # AutoAPE User Guide - Dataset
 
+- ### Dataset Tab Function
+  + 생성 : Create
+  + 분석 : Summary, Statistics, EDA Result
+  + 관리 : Management, Edit
+  + 서버 업로드 : Upload
+  
+
 | Action | Description |
 | ---- | ----------- |
 | [**Dataset Tab**](#datasettab) | 데이터셋 탭 |
@@ -10,12 +17,6 @@
 | [**Edit**](#edit) | 데이터셋 내 데이터 수정 |
 | [**Upload**](#upload) | 데이터셋 업로드 |
 | [**EDA Result**](#edaresult) | 데이터셋 EDA 결과 정보 |
-
-- ### Dataset Function
-  + 생성 : Create
-  + 분석 : Summary, Statistics, EDA Result
-  + 관리 : Management, Edit
-  + 서버 업로드 : Upload
 <hr>
 
 ## <a id="datasettab"/> **Dataset Tab**
@@ -105,17 +106,36 @@
 ![](./img/Dataset_19.png)
 - 기본 상태
 
+![](./img/Dataset_29.png)
+- 기본 상태 (이미지 Data) : 우측 하단에 보기 형식을 바꿀 수 있는 버튼이 있다. 위 화면은 썸네일 그룹 상태이다.
+
+![](./img/Dataset_30.png)
+- 이미지 Data 보기 형식 : 개별 이미지 
+
+![](./img/Dataset_32.png)
+- 개별 이미지 상태일 경우 이미지 위에 마우스를 올리면 해당 이미지의 정보를 확인할 수 있다.
+- 해당 정보 영역 상단 부의 아이콘 중 좌측 압정 아이콘은 현재 정보가 표시되는 상태로 고정하는 버튼이고 우측 이미지 아이콘은 해당 이미지의 원본 이미지를 확인할 수 있는 버튼이다.
+
+![](./img/Dataset_33.png)
+- 원본이미지 : 좌측 상단의 다운로드 버튼으로 다운로드 받을 수 있고 우측 상단의 x 버튼으로 원래 화면으로 돌아갈 수 있다.
+
+![](./img/Dataset_31.png)
+- 이미지 Data 보기 형식 : 한 줄 보기 
+
 ![](./img/Dataset_20.png)
 - Summary 내 차트 요소 클릭 후 상태 (검색)
 
+![](./img/Dataset_34.png)
+- 표 안의 셀을 오른쪽 클릭하여 검색, 복사 등의 기능을 활용 가능하다.
+
 ![](./img/Dataset_21.png)
-- 위 화면에 표시된 것과 같이 상단부는 좌측부터 검색, Data 행, 버튼의 3부분으로 구성되어 있다.
+- 위 화면에 표시된 것과 같이 Data Preview 영역의 상단부는 좌측부터 검색, Data 행, 버튼의 3부분으로 구성되어 있다.
     + 검색 : Query 형태로 검색하여 조회 가능하다. ex) pH:"3.51"
     + Data 행 : 좌측부터 Data 의 총 개수, 검색한 조건으로 조회되는 행 개수, 대용량 Data 를 대비해 불러오는 Data 의 양을 제한하여 스크롤 이벤트로 스크롤이 끝에 닿으면 다음 Data 를 불러오기 때문에 현재 불러온 Data 수, 아직 불러오지 않은  Data 수.
-    + 버튼 : 좌측부터 행 복사, 행 삭제, 검색 초기화, (Add Filed : Feature 추가) 기능을 한다.
-- 하단부는 체크박스와 Data 표로 구성되어 있다.
+    + 버튼 : Upload 이전에만 표시되며 좌측부터 행 복사, 행 삭제, 검색 초기화, (Add Filed : Feature 추가) 기능을 한다.
+- 하단부는 체크박스와 Data 표로 구성되어 있다. 이미지 Data 의 경우에는 기본적으로 썸네일 그룹이 표시되며 보기 형식을 변경할 수 있다. Dataset 의 수정은 Upload 이전에만 가능하다.
     + 체크박스 : 체크하여 하나 이상의 행을 선택할 수 있으며, 최상단의 체크박스를 선택하면 전체 선택이 가능하다.
-    + Data 표 : 실제 Dataset 의 Data 이며 각 셀의 값을 변경하거나 Feature 의 이름을 변경할 수 있다.
+    + Data 표 : 실제 Dataset 의 Data 이며 각 셀의 값을 변경하거나 Feature 의 이름을 변경할 수 있다. 또, 표의 최상단 Feature 의 이름 우측 아이콘을 클릭하여 Data 를 정렬할 수 있다.
   
   ### Copy
 ![](./img/Dataset_22.png)
