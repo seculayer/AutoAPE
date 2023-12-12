@@ -37,6 +37,8 @@ sudo sysctl --system
 ### Docker & Kubernetes Install
 ```shell
 DOCKER_VERSION=19.03.15-3.el8
+KUBE_VERSION=1.22.4-0
+
 sudo yum config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 sudo yum install -y docker-ce-"${DOCKER_VERSION}"
 sudo mkdir /etc/docker
