@@ -1169,7 +1169,7 @@ mlps-conf.xml
 </details>
 
 <details>
-<summary>MRMS(* DB User Name, Password 수정 필요)</summary>
+
 ```shell
 # AES-256 암호화(문자열 앞뒤 작은따옴표('))
 docker run --rm -it --name aes-test seculayer/ape-aes:1.0.0 ./run.sh '{DB User Name}'
@@ -1177,6 +1177,8 @@ docker run --rm -it --name aes-test seculayer/ape-aes:1.0.0 ./run.sh '{DB User N
 docker run --rm -it --name aes-test seculayer/ape-aes:1.0.0 ./run.sh '{DB User Password}'
 
 ```
+<summary>MRMS(* DB User Name, Password 수정 필요)</summary>
+
 mrms-conf.xml
 ```xml
 <?xml version="1.0"?>
