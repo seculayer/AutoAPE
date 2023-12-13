@@ -690,6 +690,21 @@ kubectl apply -f ml-db-deploy.yaml
 ```
 
 #### Configmap
+```shell
+# AES-256 암호화
+docker run --rm -it --name aes-test seculayer/ape-aes:1.0.0 ./run.sh '{Master 서버 유저명}'
+
+docker run --rm -it --name aes-test seculayer/ape-aes:1.0.0 ./run.sh '{Master 서버 비밀번호}'
+
+# Create Secret
+kubectl create secret generic mariadb-user --from-literal=username={DB User Name} --from-literal=password={DB Password} --namespace=apeautoml
+
+# Image Pull
+# docker pull seculayer/ape-db:1.0.0
+
+# DB Start
+kubectl apply -f ml-db-deploy.yaml
+```
 <details>
 <summary>APEFlow(* Master 서버 유저명, 비밀번호 수정 필요)</summary>
 
