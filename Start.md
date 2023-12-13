@@ -1370,7 +1370,6 @@ rootLogger.appenderRef.stdout.ref = STDOUT
 kubectl create configmap apeflow-conf --from-file=apeflow-conf.xml -n apeautoml
 kubectl create configmap da-conf --from-file=da-conf.xml -n apeautoml
 kubectl create configmap dprs-conf --from-file=dprs-conf.xml -n apeautoml
-kubectl create configmap mars-conf --from-file=mars-conf.xml -n apeautoml
 kubectl create configmap hprs-conf --from-file=hprs-conf.xml -n apeautoml
 kubectl create configmap mars-conf --from-file=mars-conf.xml -n apeautoml
 kubectl create configmap mlps-conf --from-file=mlps-conf.xml -n apeautoml
