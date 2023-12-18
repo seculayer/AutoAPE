@@ -1296,8 +1296,8 @@ db.properties
 ```properties
 jdbc.driver=org.mariadb.jdbc.Driver
 jdbc.url=jdbc:mariadb://apeautoml-db-svc:3306/APEAutoML?autoReconnect=true
-jdbc.username={DB User Name}
-jdbc.password={DB Password}
+jdbc.username={DB User Name(AES256 암호화}
+jdbc.password={DB Password(AES256 암호화}
 jdbc.poolMaxActive=20
 jdbc.poolMaxIdle=10
 jdbc.poolTimeToWait=5000
