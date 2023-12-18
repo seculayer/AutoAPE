@@ -97,11 +97,11 @@ sudo chown "$(id -u)":"$(id -g)" "${HOME}"/.kube/config
 ### Node Setting
 ```shell
 # Node Label (* Hostname 수정 필요)
-kubectl label nodes {Master의 Hostname} deploy=true
-kubectl label nodes {Master의 Hostname} app=true
-kubectl label nodes {Master의 Hostname} gpushare=true
-kubectl label nodes {DB Server의 Hostname} db=true
-kubectl label nodes {Master의 Hostname} master=true
+kubectl label nodes {Master의 Hostname(소문자)} deploy=true
+kubectl label nodes {Master의 Hostname(소문자)} app=true
+kubectl label nodes {Master의 Hostname(소문자)} gpushare=true
+kubectl label nodes {DB Server의 Hostname(소문자)} db=true
+kubectl label nodes {Master의 Hostname(소문자)} master=true
 
 # Node Taint
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
