@@ -696,6 +696,9 @@ docker run --rm -it --name aes-test seculayer/ape-aes:1.0.0 ./run.sh '{Master �
 
 docker run --rm -it --name aes-test seculayer/ape-aes:1.0.0 ./run.sh '{Master 서버 비밀번호}'
 
+docker run --rm -it --name aes-test seculayer/ape-aes:1.0.0 ./run.sh '{DB User Name}'
+
+docker run --rm -it --name aes-test seculayer/ape-aes:1.0.0 ./run.sh '{DB User Password}'
 ```
 <details>
 <summary>APEFlow(* Master 서버 유저명, 비밀번호 수정 필요)</summary>
@@ -1168,13 +1171,6 @@ mlps-conf.xml
 ```
 </details>
 
-```shell
-# AES-256 암호화(문자열 앞뒤 작은따옴표('))
-docker run --rm -it --name aes-test seculayer/ape-aes:1.0.0 ./run.sh '{DB User Name}'
-
-docker run --rm -it --name aes-test seculayer/ape-aes:1.0.0 ./run.sh '{DB User Password}'
-
-```
 
 <details>
 
