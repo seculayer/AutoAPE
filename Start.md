@@ -8,8 +8,8 @@
 
 
 ### Dependencies
-* docker >= 19.03.12
-* kubernetes >= 1.22.4
+* docker >= 23.0.1
+* kubernetes >= 1.26.1
 * Nvidia GPU Driver >= 440.82
 
 
