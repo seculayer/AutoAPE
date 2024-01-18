@@ -34,10 +34,9 @@ wget https://raw.githubusercontent.com/seculayer/AutoAPE-parent/main/conf/k8s.co
 sudo cp ./k8s.conf /etc/sysctl.d/
 sudo sysctl --system
 ```
-### Docker & Kubernetes Install
+### Docker
 ```shell
 DOCKER_VERSION=23.0.1
-KUBE_VERSION=1.26.1
 
 sudo yum config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 sudo yum install -y docker-ce-"${DOCKER_VERSION}"
@@ -45,9 +44,9 @@ sudo mkdir /etc/docker
 
 # GPU Version
 wget https://raw.githubusercontent.com/seculayer/AutoAPE-parent/main/conf/daemon-gpu.json
+sudo cp daemon-gpu.json /etc/docker/daemon.json
 
-
-
+# CPU Version
 wget https://raw.githubusercontent.com/seculayer/AutoAPE-parent/main/conf/daemon.json
 sudo cp daemon.json /etc/docker/daemon.json
 
@@ -58,10 +57,6 @@ sudo usermod -aG docker "${USER}"
 sudo chmod 666 /var/run/docker.sock
 sudo systemctl enable docker
 
-sudo yum config-manager --add-repo=https://raw.githubusercontent.com/seculayer/AutoAPE-parent/main/conf/kubernetes.repo
-sudo yum install -y kubelet-"${KUBE_VERSION}" kubeadm-"${KUBE_VERSION}" kubectl-"${KUBE_VERSION}" --disableexcludes=kubernetes
-sudo systemctl enable kubelet
-kubeadm config images pull
 ```
 ### Register Hostname
 ```shell
@@ -85,13 +80,21 @@ sudo mkdir -p /eyeCloudAI/data/processing/ape/detects
 sudo mkdir -p /eyeCloudAI/data/storage/ape/models
 ```
 
-### Server Module Install
+### Kubernetes Install &  Server Module Install
 ```shell
+DOCKER_VERSION=23.0.1
+KUBE_VERSION=1.26.1
+
+sudo yum config-manager --add-repo=https://raw.githubusercontent.com/seculayer/AutoAPE-parent/main/conf/kubernetes.repo
+sudo yum install -y kubelet-"${KUBE_VERSION}" kubeadm-"${KUBE_VERSION}" kubectl-"${KUBE_VERSION}" --disableexcludes=kubernetes
 * IP 주소 수정 필요 
 sudo kubeadm init --apiserver-advertise-address={kubernetes 마스터의IP}
 sudo mkdir -p "${HOME}"/.kube
 sudo cp -i /etc/kubernetes/admin.conf "${HOME}"/.kube/config
 sudo chown "$(id -u)":"$(id -g)" "${HOME}"/.kube/config
+
+sudo systemctl enable kubelet
+kubeadm config images pull
 ```
 
 ### Node Setting
@@ -419,7 +422,7 @@ spec:
         - --kubeconfig=/etc/kubernetes/scheduler.conf
         - --leader-elect=true
         - --config=/etc/kubernetes/scheduler-policy-config.yaml
-      image: registry.k8s.io/kube-scheduler:v1.22.4
+      image: registry.k8s.io/kube-scheduler:v1.26.1
       imagePullPolicy: IfNotPresent
       livenessProbe:
         failureThreshold: 8
@@ -615,7 +618,7 @@ spec:
     spec:
       containers:
         - name: apeautoml-db
-          image: seculayer/ape-db:1.0.0
+          image: seculayer/ape-db:4.0-2024.1.0117rc
           ports:
             - containerPort: 3306
           volumeMounts:
@@ -683,7 +686,7 @@ mkdir -p {DB 폴더 경로}
 kubectl create secret generic mariadb-user --from-literal=username={DB User Name} --from-literal=password={DB Password} --namespace=apeautoml
 
 # Image Pull
-# docker pull seculayer/ape-db:1.0.0
+# docker pull seculayer/ape-db:4.0-2024.1.0117rc
 
 # DB Start
 kubectl apply -f ml-db-deploy.yaml
@@ -739,17 +742,17 @@ apeflow-conf.xml
     </property>
     <property>
         <name>mrms_svc</name>
-        <value>mrms-svc</value>
+        <value>{Master 서버 IP 주소}</value>
         <description>None</description>
     </property>
     <property>
         <name>mrms_sftp_port</name>
-        <value>10022</value>
+        <value>22</value>
         <description>None</description>
     </property>
     <property>
         <name>mrms_rest_port</name>
-        <value>9200</value>
+        <value>31920</value>
         <description>None</description>
     </property>
     <property>
@@ -799,11 +802,11 @@ da-conf.xml
     <!-- hosts -->
     <property>
         <name>storage_svc</name>
-        <value>mrms-svc</value>
+        <value>{Master 서버 IP 주소}</value>
     </property>
     <property>
         <name>storage_sftp_port</name>
-        <value>10022</value>
+        <value>22</value>
     </property>
     <property>
         <name>storage_ssh_username</name>
@@ -815,15 +818,15 @@ da-conf.xml
     </property>
     <property>
         <name>mrms_svc</name>
-        <value>mrms-svc</value>
+        <value>{Master 서버 IP 주소}</value>
     </property>
     <property>
         <name>mrms_sftp_port</name>
-        <value>10022</value>
+        <value>22</value>
     </property>
     <property>
         <name>mrms_rest_port</name>
-        <value>9200</value>
+        <value>31920</value>
     </property>
     <property>
         <name>mrms_ssh_username</name>
@@ -891,15 +894,15 @@ dprs-conf.xml
     <!-- hosts -->
     <property>
         <name>mrms_svc</name>
-        <value>mrms-svc</value>
+        <value>{Master 서버 IP 주소}</value>
     </property>
     <property>
         <name>mrms_sftp_port</name>
-        <value>10022</value>
+        <value>22</value>
     </property>
     <property>
         <name>mrms_rest_port</name>
-        <value>9200</value>
+        <value>31920</value>
     </property>
     <property>
         <name>mrms_username</name>
@@ -954,15 +957,15 @@ hprs-conf.xml
     <!-- hosts -->
     <property>
         <name>mrms_svc</name>
-        <value>mrms-svc</value>
+        <value>{Master 서버 IP 주소}</value>
     </property>
     <property>
         <name>mrms_sftp_port</name>
-        <value>10022</value>
+        <value>22</value>
     </property>
     <property>
         <name>mrms_rest_port</name>
-        <value>9200</value>
+        <value>31920</value>
     </property>
     <property>
         <name>mrms_username</name>
@@ -1021,15 +1024,15 @@ mars-conf.xml
     <!-- hosts -->
     <property>
         <name>mrms_svc</name>
-        <value>mrms-svc</value>
+        <value>{Master 서버 IP 주소}</value>
     </property>
     <property>
         <name>mrms_sftp_port</name>
-        <value>10022</value>
+        <value>22</value>
     </property>
     <property>
         <name>mrms_rest_port</name>
-        <value>9200</value>
+        <value>31920</value>
     </property>
     <property>
         <name>mrms_username</name>
@@ -1135,17 +1138,17 @@ mlps-conf.xml
     <!-- rest url setting -->
     <property>
         <name>mrms_svc</name>
-        <value>mrms-svc</value>
+        <value>{Master 서버 IP 주소}</value>
         <description>None</description>
     </property>
     <property>
         <name>mrms_sftp_port</name>
-        <value>10022</value>
+        <value>22</value>
         <description>None</description>
     </property>
     <property>
         <name>mrms_rest_port</name>
-        <value>9200</value>
+        <value>31920</value>
         <description>None</description>
     </property>
     <property>
@@ -1440,7 +1443,7 @@ spec:
       serviceAccountName: mrms-user
       containers:
         - name: mrms
-          image: seculayer/automl-mrms:4.0-2023.4
+          image: seculayer/automl-mrms:4.0-2024.1.0109
           imagePullPolicy: Always
           ports:
             - containerPort: 9200
